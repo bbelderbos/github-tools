@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pybites_github_tools"
+version = "0.0.1"
+authors = [
+  { name="Bob Belderbos", email="bob@pybit.es" },
+  { name="Robin Beer", email="robin@pybit.es" },
+]
+description = "A tool to copy over issues from a template repo"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "python-decouple",
+  "pygithub",
+  "typer[all]",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov",
+]
+lint = [
+  "flake8",
+  "black",
+  "isort",
+  "pyupgrade",
+  "mypy",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/bbelderbos/github-tools"
+"Bug Tracker" = "https://github.com/bbelderbos/github-tools/issues"
