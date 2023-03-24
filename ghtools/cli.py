@@ -2,10 +2,12 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from .constants import DESTINATION_REPO, SOURCE_REPO
 from .pb_github import Message, PybitesGithub
 
 app = typer.Typer()
 console = Console()
+err_console = Console(stderr=True)
 
 
 def _show_results(output: list[Message], *, col_name) -> None:
@@ -19,11 +21,19 @@ def _show_results(output: list[Message], *, col_name) -> None:
 
 @app.command()
 def main(
-    destination_repo_name: str,
+    source: str = typer.Option(SOURCE_REPO),
+    destination: str = typer.Option(DESTINATION_REPO),
     copy_milestones: bool = True,
     copy_issues: bool = True,
 ):
-    pb_gh = PybitesGithub(destination_repo_name)
+    """Copy milestones and issues from source to destination repo"""
+    if source is None or destination is None:
+        err_console.print(
+            "[bold red]Need to know both source and " "destination repos[/bold red]"
+        )
+        raise typer.Exit(code=1)
+
+    pb_gh = PybitesGithub(source, destination)
 
     if copy_milestones:
         console.print("[green]Copying milestones ...[/green]")

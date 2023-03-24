@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from github import Github, GithubException
 
-from .constants import GH_TOKEN, GH_USER, OPEN_STATUS, SOURCE_REPO
+from .constants import GH_TOKEN, GH_USER, OPEN_STATUS
 
 
 class Message(NamedTuple):
@@ -13,10 +13,10 @@ class Message(NamedTuple):
 class PybitesGithub:
     def __init__(
         self,
+        source_repo_name,
         destination_repo_name,
         token=GH_TOKEN,
         user=GH_USER,
-        source_repo_name=SOURCE_REPO,
     ):
         self.destination_repo_name = destination_repo_name
         self.gh = Github(token)
