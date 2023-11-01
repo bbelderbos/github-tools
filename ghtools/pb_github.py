@@ -63,6 +63,12 @@ class PybitesGithub:
                 continue
 
             if self._should_skip_issue(issue, issue_filter):
+                output.append(
+                    Message(
+                        success=False,
+                        msg=f"Issue does not match '{issue_filter}', skip",
+                    )
+                )
                 continue
 
             params = {"title": issue.title}
