@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
 from github import Github, GithubException
+from github.Issue import Issue
 
 from .constants import GH_TOKEN, GH_USER, OPEN_STATUS
 
@@ -23,7 +24,7 @@ class PybitesGithub:
         self.source_repo = self.gh.get_repo(f"{user}/{source_repo_name}")
         self.destination_repo = self.gh.get_repo(f"{user}/{destination_repo_name}")
 
-    def copy_milestones(self):
+    def copy_milestones(self) -> list[Message]:
         milestones = self.source_repo.get_milestones(state=OPEN_STATUS)
         output = []
         for milestone in milestones:
@@ -45,13 +46,25 @@ class PybitesGithub:
                 )
         return output
 
-    def copy_issues(self):
+    def _should_skip_issue(self, issue: Issue, issue_filter: str | None = None) -> bool:
+        if issue_filter is None:
+            return False
+        return issue_filter.lower() not in issue.title.lower()
+
+    def copy_issues(self, issue_filter: str | None = None) -> list[Message]:
         issues = self.source_repo.get_issues(state=OPEN_STATUS)
         issue_titles_already_copied = {
             issue.title for issue in self.destination_repo.get_issues()
         }
         output = []
         for issue in issues:
+            if issue.title in issue_titles_already_copied:
+                output.append(Message(success=False, msg="Issue already created, skip"))
+                continue
+
+            if self._should_skip_issue(issue, issue_filter):
+                continue
+
             params = {"title": issue.title}
 
             if issue.body is not None:
@@ -63,10 +76,6 @@ class PybitesGithub:
             if issue.labels:
                 labels = [label.name for label in issue.labels]
                 params.update({"labels": labels})
-
-            if issue.title in issue_titles_already_copied:
-                output.append(Message(success=False, msg="Issue already created, skip"))
-                continue
 
             try:
                 self.destination_repo.create_issue(**params)

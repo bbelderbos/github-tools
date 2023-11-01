@@ -11,7 +11,6 @@ Issues were not being copied over from a template repo we have. So that's the fi
 ```
 $ python -m ghtools --destination some_repo
 Copying milestones ...
-Result:
 ┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Status ┃ Milestone                                                                  ┃
 ┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
@@ -20,7 +19,6 @@ Result:
 │ ✅     │ Copied milestone A third milestone                                         │
 └────────┴────────────────────────────────────────────────────────────────────────────┘
 Copying issues ...
-Result:
 ┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Status ┃ Issue                                                    ┃
 ┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩

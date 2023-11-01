@@ -11,12 +11,14 @@ err_console = Console(stderr=True)
 
 
 def _show_results(output: list[Message], *, col_name) -> None:
-    console.print("Result:")
     table = Table("Status", col_name)
-    for line in output:
-        icon = "✅" if line.success else "❌"
-        table.add_row(icon, line.msg)
-    console.print(table)
+    if output:
+        for line in output:
+            icon = "✅" if line.success else "❌"
+            table.add_row(icon, line.msg)
+        console.print(table)
+    else:
+        err_console.print(f"[red]No {col_name.lower()}s to copy[/red]")
 
 
 @app.command()
@@ -25,6 +27,7 @@ def main(
     destination: str = typer.Option(DESTINATION_REPO),
     copy_milestones: bool = True,
     copy_issues: bool = True,
+    issue_filter: str = typer.Option(None, help="Only copy issues matching filter."),
 ):
     """Copy milestones and issues from source to destination repo"""
     if source is None or destination is None:
@@ -42,7 +45,7 @@ def main(
 
     if copy_issues:
         console.print("[green]Copying issues ...[/green]")
-        output = pb_gh.copy_issues()
+        output = pb_gh.copy_issues(issue_filter)
         _show_results(output, col_name="Issue")
 
 
